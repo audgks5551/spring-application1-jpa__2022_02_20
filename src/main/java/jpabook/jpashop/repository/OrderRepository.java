@@ -98,7 +98,7 @@ public class OrderRepository {
         return query.getResultList();
     }
 
-    // 패치 조인
+    // 패치 조인 (성능 최적화)
     public List<Order> findAllWithMemberDelivery() {
         return em.createQuery(
                 "select o from Order o " +
@@ -106,4 +106,6 @@ public class OrderRepository {
                         "join fetch o.delivery d",Order.class
         ).getResultList();
     }
+
+
 }
