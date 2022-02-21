@@ -16,6 +16,7 @@ spring:
           default_batch_fetch_size: 1000 # jpa가 유연한 쿼리를 날릴 수 있도록 함 (1+N -> 1+1) (in 쿼리로 변경)
 #          show_sql: true
           format_sql: true
+    open-in-view: false
 
 logging:
   level:

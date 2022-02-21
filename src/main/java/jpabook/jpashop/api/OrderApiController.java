@@ -10,6 +10,9 @@ import jpabook.jpashop.repository.order.query.OrderFlatDto;
 import jpabook.jpashop.repository.order.query.OrderItemQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryDto;
 import jpabook.jpashop.repository.order.query.OrderQueryRepository;
+import jpabook.jpashop.service.query.OrderDto;
+import jpabook.jpashop.service.query.OrderItemDto;
+import jpabook.jpashop.service.query.OrderQueryService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +30,7 @@ public class OrderApiController {
 
     private final OrderRepository orderRepository;
     private final OrderQueryRepository orderQueryRepository;
+    private final OrderQueryService orderQueryService;
 
     // 쓰면 안됨
     @GetMapping("/api/v1/orders")
@@ -56,13 +60,8 @@ public class OrderApiController {
     }
 
     @GetMapping("/api/v3/orders")
-    public List<OrderDto> ordersV3() {
-        List<Order> orders = orderRepository.findAllWithItem();
-        List<OrderDto> collect = orders.stream()
-                .map(o -> new OrderDto(o))
-                .collect(toList());
-
-        return collect;
+    public List<jpabook.jpashop.service.query.OrderDto> ordersV3() {
+        return orderQueryService.ordersV3();
     }
 
     @GetMapping("/api/v3.1/orders")
@@ -106,7 +105,6 @@ public class OrderApiController {
                 .collect(toList());
     }
 
-
     @Data
     static class OrderDto {
 
@@ -115,7 +113,7 @@ public class OrderApiController {
         private LocalDateTime orderDate;
         private OrderStatus orderStatus;
         private Address address;
-        private List<OrderItemDto> orderItems; // 속에 있는 것까지 엔티티 노출 금지
+        private List<jpabook.jpashop.service.query.OrderItemDto> orderItems; // 속에 있는 것까지 엔티티 노출 금지
 
         public OrderDto(Order order) {
             orderId = order.getId();
@@ -124,7 +122,7 @@ public class OrderApiController {
             orderStatus = order.getStatus();
             address = order.getDelivery().getAddress();
             orderItems = order.getOrderItems().stream()
-                    .map(orderItem -> new OrderItemDto(orderItem))
+                    .map(orderItem -> new jpabook.jpashop.service.query.OrderItemDto(orderItem))
                     .collect(toList());
         }
 
@@ -143,4 +141,6 @@ public class OrderApiController {
             count = orderItem.getCount();
         }
     }
+
+
 }
