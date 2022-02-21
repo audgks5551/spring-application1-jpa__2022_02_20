@@ -107,12 +107,18 @@ public class OrderRepository {
         ).getResultList();
     }
 
-
+    /**
+     * distinct: 중복 제거시켜줌
+     * 쿼리 한번 나감
+     *  패치조인 하나만 해야함
+     * 단점: 페이징 불가능 (모두 가져온 후 페이징하므로 절대 하면 안됨)
+     * @return
+     */
     public List<Order> findAllWithItem() {
         return em.createQuery(
-                "select o from Order o "+
+                "select distinct o from Order o "+
                         "join fetch o.member m " +
-                        "join fetch o.orderItems oi" +
+                        "join fetch o.orderItems oi " +
                         "join fetch oi.item i", Order.class
         ).getResultList();
     }
