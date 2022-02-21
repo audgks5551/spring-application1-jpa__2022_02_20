@@ -48,6 +48,23 @@ public class OrderSimpleApiController {
         return result;
     }
 
+    /**
+     * `좋은 예시`
+     * 패치 조인: 쿼리 한번 나가기 ( 지연로딩 안됨(무시) )
+     */
+    @GetMapping("/api/v3/simple-orders")
+    public List<SimpleOrderDto> ordersV3() {
+         List<Order> orders = orderRepository.findAllWithMemberDelivery();
+        List<SimpleOrderDto> result = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+
+
+
     @Data
     static class SimpleOrderDto {
         private Long orderId;
