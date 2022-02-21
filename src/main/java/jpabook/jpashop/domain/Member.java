@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,7 @@ public class Member {
     @Embedded
     private Address address;
 
+    @JsonIgnore
     // (mappedBy = "member") -> 여기서 값을 변경한다고 해서 변경되지않는다 (읽기 모드 돌입)
     // Order의 member필드에서 변경이 일어나야 그때 Member의 orders가 변경됨
     @OneToMany(mappedBy = "member")
